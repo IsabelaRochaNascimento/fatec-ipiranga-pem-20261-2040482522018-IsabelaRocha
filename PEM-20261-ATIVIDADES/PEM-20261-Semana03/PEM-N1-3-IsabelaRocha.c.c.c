@@ -21,7 +21,7 @@
                 if(idProduto[i] == 0){
                 printf("\nDigite o ID do produto:\n");
                 scanf("%d", &idProduto[i]);
-               // break;
+               break;
             }
           }
             break;
@@ -68,7 +68,7 @@
             case 5://listar todos
             printf("\nLista dos produtos:\n");
             for(i = 0; i < 10; i++){
-                if(idProduto != 0){
+                if(idProduto[i] != 0){
                     printf("Posicao %d - ID %d\n", i, idProduto[i]);
                 }
             }
@@ -77,8 +77,9 @@
             default:
                 printf("Opcao Invalida!");
         } 
-    } while(opcao != 5); // so sai do loop quando inserir o numero cinco
+    } while(opcao != 6); // so sai do loop quando inserir o numero 6
     
         return 0;
 }
+
     
