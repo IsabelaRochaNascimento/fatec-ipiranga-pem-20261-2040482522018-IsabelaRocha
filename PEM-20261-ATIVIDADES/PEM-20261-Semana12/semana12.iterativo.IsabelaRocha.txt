@@ -1,0 +1,53 @@
+
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX_PASTAS 50
+#define LIMITE_ALERTA 300.0
+
+typedef struct Pasta {
+    char nome[50];
+    float tamanho_proprio;
+    float tamanho_total;
+    struct Pasta* subpastas[10];
+    int qtd_sub;
+} Pasta;
+
+typedef struct { Pasta* p; int idx; } Pilha;
+
+long ciclos = 0;
+
+void processarIterativo(Pasta* raiz, int limite) {
+    Pilha stack[MAX_PASTAS];
+    int topo = 0;
+    stack[0] = (Pilha){raiz, 0};
+
+    while (topo >= 0) {
+        ciclos++;
+        Pasta* atual = stack[topo].p;
+        int i = stack[topo].idx;
+
+        if (i == 0) atual->tamanho_total = atual->tamanho_proprio;
+
+        if (i < atual->qtd_sub && /* condicional de nível */ 1) {
+            stack[topo].idx++;
+            stack[++topo] = (Pilha){atual->subpastas[i], 0};
+        } else {
+            if (topo > 0) stack[topo - 1].p->tamanho_total += atual->tamanho_total;
+            topo--;
+        }
+    }
+}
+
+int main() {
+    Pasta drive[4];
+    //configuração das pastas igual ao arquivo1
+
+    clock_t t = clock();
+    processarIterativo(&drive[0], 2);
+    t = clock() - t;
+
+    printf("ITERATIVO: Ciclos: %ld | Tempo: %f s\n", ciclos, ((double)t)/CLOCKS_PER_SEC);
+    return 0;
+}

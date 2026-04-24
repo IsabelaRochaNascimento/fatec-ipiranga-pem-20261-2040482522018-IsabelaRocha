@@ -1,0 +1,41 @@
+
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX_PASTAS 50
+#define LIMITE_ALERTA 300.0
+
+typedef struct Pasta {
+    char nome[50];
+    float tamanho_proprio;
+    float tamanho_total;
+    struct Pasta* subpastas[10];
+    int qtd_sub;
+} Pasta;
+
+long ciclos = 0;
+
+float processarRecursivo(Pasta* p, int nivel, int limite) {
+    ciclos++;
+    p->tamanho_total = p->tamanho_proprio;
+
+    if (nivel < limite) {
+        for (int i = 0; i < p->qtd_sub; i++) {
+            p->tamanho_total += processarRecursivo(p->subpastas[i], nivel + 1, limite);
+        }
+    }
+    return p->tamanho_total;
+}
+
+int main() {
+    Pasta drive[4];
+    //pastas gerada para brevidade
+    
+    clock_t t = clock();
+    processarRecursivo(&drive[0], 0, 2);
+    t = clock() - t;
+
+    printf("RECURSIVO: Ciclos: %ld | Tempo: %f s\n", ciclos, ((double)t)/CLOCKS_PER_SEC);
+    return 0;
+}
